@@ -1,0 +1,19 @@
+{
+  "name": "crypto-fee-optimizer",
+  "version": "1.0.0",
+  "description": "Cross-chain transfer optimization tool with native fee sharing.",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "crypto",
+    "bridge",
+    "dex",
+    "aggregator",
+    "fees",
+    "lifi"
+  ],
+  "author": "",
+  "license": "MIT"
+}

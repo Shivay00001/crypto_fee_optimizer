@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Fee Optimizer | Find the Cheapest Route</title>
+    <meta name="description" content="Find the cheapest and fastest way to transfer crypto across chains. Save on gas fees with our free optimization tool.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Ethers.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+</head>
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>FeeOptimizer</span>
+        </div>
+        <button id="connect-wallet-btn" class="btn btn-secondary">Connect Wallet</button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Transfer Crypto <span class="gradient-text">Cheaper & Faster</span></h1>
+            <p class="subtitle">Aggregating bridges and DEXs to find you the best route.</p>
+        </section>
+
+        <section class="swap-card">
+            <div class="input-group">
+                <label for="amount">You Send</label>
+                <div class="input-wrapper">
+                    <input type="number" id="amount" placeholder="0.0" min="0" step="any">
+                    <button class="token-selector" id="from-token-btn">
+                        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png" alt="ETH" id="from-token-icon">
+                        <span id="from-token-symbol">ETH</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                </div>
+                <div class="chain-selector">
+                    <span>From Network:</span>
+                    <select id="from-chain-select">
+                        <!-- Populated by JS -->
+                        <option value="1">Ethereum</option>
+                        <option value="137">Polygon</option>
+                        <option value="42161">Arbitrum</option>
+                        <option value="10">Optimism</option>
+                        <option value="56">BSC</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="swap-icon">
+                <button id="switch-chains-btn" aria-label="Switch Chains">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="input-group">
+                <label for="receive-amount">You Receive (Estimated)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="receive-amount" placeholder="0.0" readonly>
+                    <button class="token-selector" id="to-token-btn">
+                        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/assets/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174/logo.png" alt="USDC" id="to-token-icon">
+                        <span id="to-token-symbol">USDC</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                </div>
+                <div class="chain-selector">
+                    <span>To Network:</span>
+                    <select id="to-chain-select">
+                         <!-- Populated by JS -->
+                         <option value="137" selected>Polygon</option>
+                         <option value="1">Ethereum</option>
+                         <option value="42161">Arbitrum</option>
+                         <option value="10">Optimism</option>
+                         <option value="56">BSC</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="find-route-btn" class="btn btn-primary btn-large">Find Best Route</button>
+            
+            <p class="disclaimer-text">
+                By using this tool, you agree that we do not hold funds. 
+                <br> Transactions are executed directly via smart contracts.
+            </p>
+        </section>
+
+        <section id="results-section" class="results-container hidden">
+            <!-- Dynamic Route Cards will be injected here -->
+        </section>
+
+    </main>
+
+    <!-- Token Selection Modal -->
+    <div id="token-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Token</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <input type="text" id="token-search" placeholder="Search name or paste address">
+            <div id="token-list" class="token-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Config Instructions Modal (First Time User) -->
+    <div id="config-modal" class="modal hidden">
+         <div class="modal-content">
+            <div class="modal-header">
+                <h3>Setup Required</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p>To earn fees, you must configure your Integrator ID in <code>config.js</code>.</p>
+            <p>1. Go to Li.Fi Dashboard and get an API Key/Integrator ID (optional for testing, required for fees).</p>
+            <p>2. Open <code>config.js</code> and update the values.</p>
+            <button class="btn btn-primary" id="close-config-btn">Got it</button>
+        </div>
+    </div>
+
+    <script type="module" src="config.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

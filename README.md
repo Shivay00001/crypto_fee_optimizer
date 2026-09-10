@@ -71,3 +71,11 @@ crypto_fee_optimizer/
 - **Financial Advice**: This tool does not provide financial advice. All trades are performed at the user's own risk.
 - **No Custody**: We never hold your funds. All transactions happen directly between the user's wallet and the integrated smart contracts.
 - **Transparency**: Every transaction yields a verifiable hash on the blockchain.
+
+
+## Prerequisites
+- Required environment and dependencies
+
+## Usage
+Instructions on how to run the project.
+

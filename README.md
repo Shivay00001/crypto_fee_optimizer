@@ -1,5 +1,7 @@
 # ⚡ Crypto Fee Optimizer
 
+Built by [VisionQuantech](https://visionquantech.com) — AI agents, apps & tools for small businesses.
+
 A high-performance, on-chain tool designed to find the cheapest and fastest routes for moving crypto across different blockchains. This tool is serverless, executes entirely in the browser, and respects user custody.
 
 ## 🚀 Vision
@@ -78,4 +80,3 @@ crypto_fee_optimizer/
 
 ## Usage
 Instructions on how to run the project.
-
